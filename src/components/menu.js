@@ -37,4 +37,5 @@ Menu.propTypes = {
   numLines: React.PropTypes.number,
   lines:React.PropTypes.array
 }
+
 export default Menu

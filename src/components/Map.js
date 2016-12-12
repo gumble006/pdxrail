@@ -8,6 +8,7 @@ import { config  } from '../config/leaflet';
 import { lineParams, markerParams, filteredParams, fitBoundsParams } from '../config/styles';
 import Menu from './menu' ;
 
+// Generally we are making sure Leaflet is able to update itself with this component, rather than React being in charge of re-renders 
 
 class Map extends Component {
 	constructor(props) {
@@ -31,6 +32,7 @@ class Map extends Component {
 	}
 
 	componentDidMount() {
+		// Load geojson after map is in place
 		this.getData();
 
 		if(!this.state.map) {
@@ -39,6 +41,7 @@ class Map extends Component {
 	}
 
   componentWillUnmount() {
+  	// clear leaflet listeners before map removed from dom
     this.state.map.remove();
   }
 
@@ -63,8 +66,10 @@ class Map extends Component {
 	}
 
 	updateMap(e){
+
+		// change the rail line filter based on select field
     let railLine = e.target.value.split(' (')[0];
-    // change the rail line filter
+    
     if (railLine === "All lines" ) {
       railLine = "*";
     }
@@ -104,6 +109,7 @@ class Map extends Component {
 	}
 
 	filterFeatures(feature, layer) {
+		// check if each feature includes filtered line or include all if 'all lines' selected
     const lineTest = feature.properties.LINE.split('/').indexOf(this.state.railLinesFilter) !== -1;
 
 		if (this.state.railLinesFilter === '*' || lineTest ) {
@@ -112,7 +118,7 @@ class Map extends Component {
   }
 
 	filterGeoJSONLayer() {
-    // clear geojson layer, re-add the geojson to re-filter, adjust zoom
+    // clear geojson layer, re-add the geojson to re-filter, adjust zoom to new bounds
     this.state.geojsonLayer.clearLayers();
 
     this.state.geojsonLayer.addData(this.state.geojsonCombined);
@@ -126,12 +132,14 @@ class Map extends Component {
   }
 
   pointToLayer(feature, latlng) {
+  	//apply styling for point data
     if(this.state.railLinesFilter === '*') return L.circleMarker(latlng, markerParams);
     
     return L.circleMarker(latlng, filteredParams(this.state.railLinesFilter));
   }
 
   styleGeojsonLines(feature){
+  	//apply styling for point data
   	if (feature.properties && feature.geometry.type === 'LineString' && this.state.railLinesFilter !== '*' ) {
   		return lineParams(this.state.railLinesFilter);
   	}
@@ -166,7 +174,7 @@ class Map extends Component {
 	}
 
 	render(){
-
+		// count total stations for filtered features
     const filterStationCount = geojsonStations.features.filter((item,idx)=>{
       return item.properties.LINE.split('/').indexOf(this.state.railLinesFilter) !== -1
     }).length;
