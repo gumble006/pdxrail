@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
-import Map from './Map';
+import React from 'react';
+import Map from './map';
 
-export default class App extends Component {
-  render() {
-    return (
-    	<div>
-	      <Map />
-      </div>
-    );
-  }
-}
+const App = () => 
+  <div>
+    <Map />
+  </div>;
+
+export default App;
