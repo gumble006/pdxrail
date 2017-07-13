@@ -12,6 +12,9 @@
     "start": "node server.js"
   },
   "author": "",
+  "engines": {
+    "node": "6.5.0"
+  },
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.2.1",
